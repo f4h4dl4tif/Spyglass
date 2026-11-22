@@ -1,0 +1,8 @@
+#!/bin/bash
+# Open Spyglass for the person who is logged in (the installer itself runs as root).
+USER_NAME=$(/usr/bin/stat -f%Su /dev/console)
+if [ -n "$USER_NAME" ] && [ "$USER_NAME" != "root" ]; then
+  USER_ID=$(/usr/bin/id -u "$USER_NAME")
+  /bin/launchctl asuser "$USER_ID" /usr/bin/sudo -u "$USER_NAME" /usr/bin/open -g /Applications/Spyglass.app || true
+fi
+exit 0

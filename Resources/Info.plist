@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key><string>Spyglass</string>
+	<key>CFBundleDisplayName</key><string>Spyglass</string>
+	<key>CFBundleExecutable</key><string>Spyglass</string>
+	<key>CFBundleIdentifier</key><string>local.spyglass.Spyglass</string>
+	<key>CFBundleIconFile</key><string>AppIcon</string>
+	<key>CFBundlePackageType</key><string>APPL</string>
+	<key>CFBundleShortVersionString</key><string>1.1</string>
+	<key>CFBundleVersion</key><string>2</string>
+	<key>LSMinimumSystemVersion</key><string>14.0</string>
+	<key>LSApplicationCategoryType</key><string>public.app-category.productivity</string>
+	<key>NSHighResolutionCapable</key><true/>
+	<key>NSPrincipalClass</key><string>NSApplication</string>
+	<key>NSSupportsAutomaticTermination</key><false/>
+	<key>CFBundleURLTypes</key>
+	<array><dict>
+		<key>CFBundleURLName</key><string>Spyglass link</string>
+		<key>CFBundleURLSchemes</key><array><string>spyglass</string></array>
+	</dict></array>
+	<key>CFBundleDocumentTypes</key>
+	<array><dict>
+		<key>CFBundleTypeName</key><string>Folder</string>
+		<key>CFBundleTypeRole</key><string>Viewer</string>
+		<key>LSHandlerRank</key><string>Alternate</string>
+		<key>LSItemContentTypes</key><array><string>public.folder</string><string>public.item</string></array>
+	</dict></array>
+	<key>NSPhotoLibraryUsageDescription</key><string>Spyglass shows your Photos library read-only and exports originals when you ask.</string>
+	<key>NSSpeechRecognitionUsageDescription</key><string>Spyglass transcribes audio and video to text on this Mac when you use the Transcribe tool.</string>
+	<key>NSScreenCaptureUsageDescription</key><string>Spyglass records your screen only when you use the Record Screen tool.</string>
+	<key>NSMicrophoneUsageDescription</key><string>Spyglass records your microphone only when you use the Record Audio tool.</string>
+	<key>NSDesktopFolderUsageDescription</key><string>Spyglass shows, searches and tidies the files on your Desktop.</string>
+	<key>NSDocumentsFolderUsageDescription</key><string>Spyglass shows, searches and tidies your Documents.</string>
+	<key>NSDownloadsFolderUsageDescription</key><string>Spyglass shows your recent downloads and where they came from.</string>
+	<key>NSRemovableVolumesUsageDescription</key><string>Spyglass browses and ejects external drives.</string>
+	<key>NSNetworkVolumesUsageDescription</key><string>Spyglass browses network shares you open.</string>
+	<key>NSAppleEventsUsageDescription</key><string>Spyglass asks for your password only for actions that need it, like turning off a system startup item.</string>
+</dict>
+</plist>

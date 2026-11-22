@@ -1,0 +1,81 @@
+How to install Spyglass
+====================
+
+Requires macOS 14 Sonoma or later. Runs on Apple Silicon and Intel Macs.
+
+Spyglass isn't notarized by Apple, so on a new Mac macOS blocks it the first
+time. Pick ONE of the two ways below, and use the Terminal fixes if it fails.
+
+
+OPTION A: Installer package (Spyglass-x.x.pkg)
+-------------------------------------------
+1. Double-click Spyglass-x.x.pkg.
+2. If macOS says it "can't be opened" or "could not verify" it: click Done,
+   open System Settings > Privacy & Security, scroll to Security and click
+   "Open Anyway" next to Spyglass-x.x.pkg. Enter your password.
+3. Follow the installer. Spyglass is installed in Applications and opens itself.
+
+
+OPTION B: Disk image (Spyglass-x.x.dmg)
+------------------------------------
+1. Open the .dmg and drag Spyglass onto the Applications folder.
+2. Open Spyglass from Applications. If macOS blocks it, click Done (don't move
+   it to the Bin), then System Settings > Privacy & Security > "Open Anyway".
+
+
+IF IT STILL FAILS: Terminal commands
+------------------------------------
+Open Terminal (Applications > Utilities > Terminal), paste a command, press
+Return and type your Mac password when asked (nothing shows as you type).
+
+1. The installer package won't open. Install it from Terminal instead
+   (change the path if the file isn't in Downloads):
+
+       sudo installer -pkg ~/Downloads/Spyglass-*.pkg -target /
+
+2. Spyglass is installed but won't open, or macOS says it is "damaged":
+
+       sudo xattr -cr /Applications/Spyglass.app && open /Applications/Spyglass.app
+
+3. "Open Anyway" doesn't appear, or the .pkg / .dmg itself is blocked:
+
+       xattr -c ~/Downloads/Spyglass-*
+
+   then double-click the file again.
+
+4. A tool keeps saying permission is denied (folders, Photos, microphone,
+   speech recognition, screen recording):
+
+       tccutil reset All local.spyglass.Spyglass
+
+   then quit and reopen Spyglass and allow the prompts again.
+
+5. Check the Mac is new enough (must say 14 or higher):
+
+       sw_vers -productVersion
+
+
+AFTER INSTALLING
+----------------
+Spyglass opens with a Home dashboard. Press Option-Space in any app for
+Quick Search, or Command-K inside the window. The menu bar icon (a folder
+with a spyglass) shows your recent downloads.
+
+Optional: for Space Map, Clean Up and Duplicates to see every folder, open
+System Settings > Privacy & Security > Full Disk Access and turn on Spyglass.
+
+Some features ask for permission the first time: Photos, Transcribe (speech
+recognition), Record Screen (screen recording) and Record Audio (microphone).
+Apple Intelligence features need macOS 26 with Apple Intelligence turned on;
+without it, Spyglass uses its built-in offline method.
+
+Shortcuts and Siri: open the Shortcuts app and search "Spyglass" for 15
+actions (Find Files, Get Mac Health, Summarize Document, Run Routine...).
+
+If Option-Space doesn't work, another app may already use it. Pick another
+shortcut in Spyglass > Settings > General > Quick Search shortcut.
+
+To uninstall: use Spyglass > Settings > Advanced > Uninstall Spyglass, or quit
+it from the menu bar icon and run
+
+       rm -rf /Applications/Spyglass.app ~/Library/Application\ Support/Spyglass
