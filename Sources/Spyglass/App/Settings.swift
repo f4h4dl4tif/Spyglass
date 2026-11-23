@@ -15,6 +15,7 @@ struct SettingsView: View {
 
 private struct GeneralSettings: View {
     @AppStorage("theme") private var theme = "playful"
+    @AppStorage(GlassTheme.key) private var glassTheme = false
     @AppStorage("quickSearchHotkey") private var hotkey = "optSpace"
     @AppStorage("menuBarEnabled") private var menuBar = true
     @AppStorage("menuBarReadings") private var readings = false
@@ -31,6 +32,12 @@ private struct GeneralSettings: View {
                 Text("Playful — each kind of file gets its colour").tag("playful")
                 Text("Minimal — the library stays grey").tag("minimal")
             }.pickerStyle(.radioGroup)
+            Toggle(isOn: $glassTheme) {
+                Text("Liquid Glass theme")
+                Text(GlassTheme.supported ? "Quick Search, dashboard cards and pop-up notices use Apple's Liquid Glass. File lists stay plain."
+                                          : "Requires macOS 26.")
+            }
+            .disabled(!GlassTheme.supported)
             Picker("Quick Search shortcut", selection: $hotkey) { ForEach(AppDelegate.hotkeyChoices, id: \.id) { Text($0.label).tag($0.id) } }
             Text("Works from any app, even when the Spyglass window is closed.").font(.caption).foregroundStyle(.secondary)
             Picker("Folders open as", selection: $mode) { Text("Icons").tag("grid"); Text("List").tag("list"); Text("Columns").tag("columns") }

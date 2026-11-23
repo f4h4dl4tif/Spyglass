@@ -206,6 +206,7 @@ struct ActivityEntry: Codable, Identifiable, Hashable {
 
 struct ToastView: View {
     @ObservedObject var log = ActivityLog.shared
+    @Environment(\.glassOn) private var glassOn
     var body: some View {
         if let t = log.toast {
             HStack(spacing: 12) {
@@ -217,9 +218,7 @@ struct ToastView: View {
                 Button { withAnimation { log.toast = nil } } label: { Image(systemName: "xmark") }.buttonStyle(.borderless).foregroundStyle(.secondary)
             }
             .padding(.horizontal, 16).padding(.vertical, 10)
-            .background(.regularMaterial, in: Capsule())
-            .overlay(Capsule().strokeBorder(.separator))
-            .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+            .floatingSurface(glassOn, in: Capsule())
             .padding(.bottom, 18)
             .transition(.move(edge: .bottom).combined(with: .opacity))
         }

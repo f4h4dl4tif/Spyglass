@@ -196,6 +196,7 @@ import Darwin
 
 struct TransfersOverlay: View {
     @ObservedObject var q = TransferQueue.shared
+    @Environment(\.glassOn) private var glassOn
     var body: some View {
         if !q.jobs.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
@@ -217,9 +218,7 @@ struct TransfersOverlay: View {
                 }
             }
             .padding(14).frame(width: 340)
-            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(.separator))
-            .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+            .floatingSurface(glassOn, in: RoundedRectangle(cornerRadius: 14))
             .padding(16)
             .transition(.move(edge: .trailing).combined(with: .opacity))
         }

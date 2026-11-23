@@ -17,7 +17,7 @@ import AppKit
             p.isFloatingPanel = true; p.level = .floating; p.backgroundColor = .clear; p.isOpaque = false; p.hasShadow = true
             p.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             p.isMovableByWindowBackground = true
-            p.contentView = NSHostingView(rootView: QuickSearchView(state: state, close: { [weak self] in self?.hide() }))
+            p.contentView = NSHostingView(rootView: QuickSearchView(state: state, close: { [weak self] in self?.hide() }).glassThemeRoot())
             p.onResign = { [weak self] in self?.hide() }
             panel = p
         }
@@ -181,8 +181,7 @@ struct QuickSearchView: View {
             .overlay { if state.rows.isEmpty && !state.text.isEmpty { Text("No results").foregroundStyle(.secondary) } }
         }
         .frame(width: 680, height: 460)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(Color.primary.opacity(0.1)))
+        .modifier(QuickSearchSurface())
         .onAppear { focus = true }
         .onChange(of: state.text) { _, _ in state.update() }
         .onChange(of: state.scope) { _, _ in state.update() }
@@ -201,5 +200,20 @@ struct QuickSearchView: View {
     func submit(_ mode: Int) {
         if state.rows.indices.contains(state.selected) { state.activate(state.rows[state.selected], mode: mode) }
         else if !state.text.isEmpty { QuickSearchPanel.shared.hide(); AppModel.shared.searchText = state.text; AppModel.shared.show(.search(state.text)) }
+    }
+}
+
+/// The panel's background: the original material, or Liquid Glass when the glass theme is on.
+private struct QuickSearchSurface: ViewModifier {
+    @Environment(\.glassOn) private var glassOn
+    func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
+        if glassOn {
+            content.glassPanel(true, in: shape)
+        } else {
+            content
+                .background(.regularMaterial, in: shape)
+                .overlay(shape.strokeBorder(Color.primary.opacity(0.1)))
+        }
     }
 }

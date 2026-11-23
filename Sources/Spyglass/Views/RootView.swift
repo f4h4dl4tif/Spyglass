@@ -18,6 +18,7 @@ struct RootView: View {
                 TransfersOverlay().frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             }
             .toolbar { MainToolbar() }
+            .glassThemeRoot()
             .inspector(isPresented: $model.showInspector) {
                 InspectorView(url: model.inspected).inspectorColumnWidth(min: 240, ideal: 280, max: 400)
             }
@@ -35,6 +36,7 @@ struct URLList: Identifiable { let urls: [URL]; var id: String { urls.map(\.path
 
 struct Detail: View {
     @EnvironmentObject var model: AppModel
+    @Environment(\.glassOn) private var glassOn
     var body: some View {
         Group {
             switch model.page {
@@ -67,7 +69,16 @@ struct Detail: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .glassBackdrop(glassOn && !Self.isFileList(model.page))
         .transition(.opacity)
+    }
+
+    /// Pages that are mostly a file list keep their plain, readable background.
+    static func isFileList(_ p: Page) -> Bool {
+        switch p {
+        case .folder, .recents, .downloadedFrom, .library, .search, .cloud, .photos, .imageText: return true
+        default: return false
+        }
     }
 }
 
@@ -163,13 +174,22 @@ extension PageHeader where Trailing == EmptyView {
 struct Card<Content: View>: View {
     var padding: CGFloat = 16
     @ViewBuilder var content: Content
+    @Environment(\.glassOn) private var glassOn
     var body: some View {
-        content
-            .padding(padding)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(Color.primary.opacity(0.07)))
-            .shadow(color: .black.opacity(0.04), radius: 3, y: 1)
+        // Edge-to-edge cards (padding 0) hold lists, so they keep the solid, readable surface.
+        if glassOn && padding > 0 {
+            content
+                .padding(padding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .glassPanel(true, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        } else {
+            content
+                .padding(padding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(Color.primary.opacity(0.07)))
+                .shadow(color: .black.opacity(0.04), radius: 3, y: 1)
+        }
     }
 }
 

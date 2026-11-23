@@ -14,6 +14,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             "lowSpaceAlert": true, "lowSpaceGB": 15, "showTips": true, "searchContents": true, "searchMeaning": true,
             "historyEnabled": true, "showCloudDrives": true,
         ])
+        #if DEBUG
+        // Glass snapshot runs skip background services (routines, timers, hotkeys) so they have no side effects.
+        if let dir = MainActor.assumeIsolated({ GlassSnapshot.requestedDir }) {
+            Task { @MainActor in await GlassSnapshot.run(dir) }
+            return
+        }
+        #endif
         MainActor.assumeIsolated {
             if UserDefaults.standard.bool(forKey: "menuBarEnabled") { StatusItemController.shared.install() }
             HealthHistory.shared.start()

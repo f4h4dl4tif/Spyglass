@@ -148,6 +148,7 @@ struct ToolsGridView: View {
     @EnvironmentObject var model: AppModel
     @State private var filter = ""
     @State private var dropTarget: String?
+    @Environment(\.glassOn) private var glassOn
 
     var body: some View {
         let list = (category.map(ToolCatalog.tools(in:)) ?? ToolCatalog.all).filter { filter.isEmpty || $0.name.localizedCaseInsensitiveContains(filter) || $0.detail.localizedCaseInsensitiveContains(filter) }
@@ -173,8 +174,9 @@ struct ToolsGridView: View {
                                         Spacer(minLength: 0)
                                     }
                                     .padding(12).frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
-                                    .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12))
-                                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(dropTarget == t.id ? Color.accentColor : Color.primary.opacity(0.07), lineWidth: dropTarget == t.id ? 2 : 1))
+                                    .background(glassOn ? Color.clear : Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12))
+                                    .glassPanel(glassOn, in: RoundedRectangle(cornerRadius: 12), interactive: true)
+                                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(dropTarget == t.id ? Color.accentColor : Color.primary.opacity(glassOn ? 0 : 0.07), lineWidth: dropTarget == t.id ? 2 : 1))
                                     .scaleEffect(dropTarget == t.id ? 1.03 : 1)
                                     .animation(.spring(duration: 0.25), value: dropTarget)
                                 }
